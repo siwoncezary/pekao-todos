@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./js/main.js" ></script>
+</head>
+<body onload = "initApp()">
+<form>
+    <input type="number" id = "userId" placeholder="id użytkownika"/>
+    <input type="hidden" id = "id"/>
+    <input type="text" id = "title" placeholder="wpisz zadanie"/>
+    <input type="checkbox" id ="completed" placeholder="wykonanie">
+    <input type="hidden" id = "operation" value="create">
+    <button type="button" onclick="processTask()">Utwórz</button>
+</form>
+<div id="view">
+    <table>
+        <tr>
+            <th>
+               id
+            </th>
+            <th>
+                userId
+            </th>
+            <th>
+                title
+            </th>
+            <th>
+                completed
+            </th>
+        </tr>
+        <tbody id = "todos">
+
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
