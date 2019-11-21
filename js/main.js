@@ -1,4 +1,4 @@
-let restTodos = new AJAX("https://jsonplaceholder.typicode.com/todos");
+const restTodos = new AJAX("https://jsonplaceholder.typicode.com/todos");
 
 function AJAX(url){
     this.url = url;
@@ -30,15 +30,14 @@ function processTask(){
     let operation = document.getElementById("operation").value;
     switch(operation){
         case "create":{
-            let titleX = document.getElementById("title").value;
-            let completedX = document.getElementById("completed").checked;
-            let userIdX = document.getElementById("userId").value;
+            let title = document.getElementById("title").value;
+            let completed = document.getElementById("completed").checked;
+            let userId= document.getElementById("userId").value;
             let object = {
-                id:0,
-                userId: userIdX,
-                title: titleX,
-                completed: completedX};
-            console.log("Task " + JSON.stringify(object));
+                "id":0,
+                "userId": userId,
+                "title": title,
+                "completed": completed};
             restTodos.create(object,
                                 function(response){
                                     console.log(response);
@@ -68,7 +67,6 @@ function injectHtmlCodeInTableTodos() {
 function getTodosFromRestApi(){
     restTodos.read(injectHtmlCodeInTableTodos());
 }
-
 
 function initApp(){
     getTodosFromRestApi();
