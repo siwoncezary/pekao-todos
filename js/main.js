@@ -1,4 +1,4 @@
-const restTodos = new AJAX("https://jsonplaceholder.typicode.com/todos");
+const restTodos = new AJAX("https://pko-one.glitch.me/todos");
 
 function AJAX(url){
     this.url = url;
@@ -12,12 +12,34 @@ function AJAX(url){
         }
         ajax.send();
     };
+    this.findById = function (id, callback) {
+        let ajax = new XMLHttpRequest();
+        ajax.open("GET", this.url + `/${id}`);
+        ajax.onreadystatechange = function(){
+            if (this.readyState === 4 && this.status === 200){
+                callback(this.response);
+            }
+        }
+        ajax.send();
+    }
     this.create = function(object, callback){
         let ajax = new XMLHttpRequest();
         ajax.open("POST",this.url);
         ajax.setRequestHeader("Content-Type","application/json");
         ajax.onreadystatechange = function(){
-            if (this.readyState === 4 && this.status === 201){
+            if (this.readyState === 4 && this.status === 200){
+                console.log("Create response");
+                callback(this.response);
+            }
+        }
+        ajax.send(JSON.stringify(object));
+    }
+    this.patch = function(id, object, callback){
+        let ajax = new XMLHttpRequest();
+        ajax.open("PATCH",this.url + `/${id}`);
+        ajax.setRequestHeader("Content-Type","application/json");
+        ajax.onreadystatechange = function(){
+            if (this.readyState === 4 && this.status === 200){
                 callback(this.response);
             }
         }
@@ -25,7 +47,7 @@ function AJAX(url){
     }
 }
 
-function processTask(){
+function createTask(){
     console.log("processTask button clicked");
     let operation = document.getElementById("operation").value;
     switch(operation){
@@ -38,9 +60,9 @@ function processTask(){
                 "userId": userId,
                 "title": title,
                 "completed": completed};
-            restTodos.create(object,
-                                function(response){
-                                    console.log(response);
+            restTodos.create(object, function(response){
+                                    console.log("Task created " + response);
+                                    getTodosFromRestApi();
                                 });
             }
             break;
@@ -57,7 +79,7 @@ function injectHtmlCodeInTableTodos() {
                     <td>${item.id}</td>
                     <td>${item.userId}</td>
                     <td>${item.title}</td>
-                    <td>${item.completed}</td>
+                    <td><input type="checkbox" ${item.completed ? "checked" : ""} onchange="setCompleted(${item.id})"/></td>
                     </tr>`;
         });
         document.getElementById("todos").innerHTML = html.join("");
@@ -70,6 +92,19 @@ function getTodosFromRestApi(){
 
 function initApp(){
     getTodosFromRestApi();
+}
+
+function setCompleted(id){
+    const task = restTodos.findById(id, setCompletedTask);
+}
+
+function setCompletedTask(response){
+    const task = JSON.parse(response);
+    console.log(task);
+    restTodos.patch(task.id, {completed: !task.completed}, function(response){
+       console.log("Patched");
+       getTodosFromRestApi();
+    });
 }
 
 
