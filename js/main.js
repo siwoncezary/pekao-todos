@@ -1,4 +1,4 @@
-const restTodos = new AJAX("https://pko-one.glitch.me/todos");
+const restTodos = new AJAX("https://pekao-one.glitch.me/todos");
 
 function AJAX(url){
     this.url = url;
@@ -140,6 +140,7 @@ function deleteTask(id){
 
 function modifyTitle(id){
     let cellTitle = document.getElementById(`title-${id}`);
+    console.log(cellTitle.childNodes);
     let title = cellTitle.childNodes[1].textContent;
     cellTitle.innerHTML = `<input id="${id}" type="text" value="${title}"/> 
                            <button onclick="modifyTitleTask(${id})">Zapisz</button>`;
@@ -147,9 +148,8 @@ function modifyTitle(id){
 
 function setTitle(task){
     let cellTitle = document.getElementById(`title-${task.id}`);
-    cellTitle.innerHTML = `<td id="title-${task.id}">
-                        <button onclick="modifyTitle(${task.id})">Edytuj</button>
-                        ${task.title}</td>`;
+    console.log(task);
+    cellTitle.innerHTML = `<td id="title-${task.id}"><button onclick="modifyTitle('${task.id}')">Edytuj</button>${task.title}</td>`;
 }
 
 function modifyTitleTask(id) {
